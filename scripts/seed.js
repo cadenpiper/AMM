@@ -34,7 +34,7 @@ async function main() {
 
   // Fetch USD token
   const usd = await ethers.getContractAt('Token', config[chainId].usd.address)
-  console.log(`USD Token fetched: ${usd.address}`)
+  console.log(`USD Token fetched: ${usd.address}\n`)
 
   /////////////////////////////////////////////////////////
   // Distributes tokens to investors
