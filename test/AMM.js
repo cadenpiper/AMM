@@ -6,6 +6,7 @@ const tokens = (n) => {
 }
 
 const ether = tokens
+const shares = ether
 
 describe('AMM', () => {
   let accounts,
@@ -271,22 +272,41 @@ describe('AMM', () => {
 
       // Check price after swapping
       console.log(`Price: ${await amm.token2Balance() / await amm.token1Balance()}`)
+
+      /////////////////////////////////////////////////////////
+      // Removing Liquidity
+      //
+
+      console.log(`AMM token1 balance: ${ethers.utils.formatEther(await amm.token1Balance())}\n`)
+      console.log(`AMM token2 balance: ${ethers.utils.formatEther(await amm.token2Balance())}\n`)
+
+      // Check liquidity provider balance before removing tokens
+      balance = await token1.balanceOf(liquidityProvider.address)
+      console.log(`Liquidity Provider token1 balance before removing funds: ${ethers.utils.formatEther(balance)}\n`)
+
+      balance = await token2.balanceOf(liquidityProvider.address)
+      console.log(`Liquidity Provider token2 balance before removing funds: ${ethers.utils.formatEther(balance)}\n`)
+
+      // Liquidity provider removes tokens from AMM pool
+      transaction = await amm.connect(liquidityProvider).removeLiquidity(shares(50)) // 50 shares not tokens
+      await transaction.wait()
+
+      // Check liquidity provider balance after removing funds
+      balance = await token1.balanceOf(liquidityProvider.address)
+      console.log(`Liquidity Provider token1 balance after removing funds: ${ethers.utils.formatEther(balance)}\n`)
+
+      balance = await token2.balanceOf(liquidityProvider.address)
+      console.log(`Liquidity Provider token2 balance after removing funds: ${ethers.utils.formatEther(balance)}`)
+
+      // Liquidity provider should have zero shares
+      expect(await amm.shares(liquidityProvider.address)).to.equal(0)
+
+      // Deployer should have 100 shares
+      expect(await amm.shares(deployer.address)).to.equal(shares(100))
+
+      // AMM pool has 100 total shares
+      expect(await amm.totalShares()).to.equal(shares(100))
     })
   })
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
