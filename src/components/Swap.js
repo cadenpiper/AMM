@@ -81,7 +81,6 @@ const Swap = () => {
 
 		const _inputAmount = ethers.utils.parseUnits(inputAmount, 'ether')
 
-		// Swap token depending on what were doing
 		if (inputToken === 'DAPP') {
 			await swap(provider, amm, tokens[0], inputToken, _inputAmount, dispatch)
 		} else {

@@ -37,23 +37,18 @@ const Deposit = () => {
 		if (e.target.id === 'token1') {
 			setToken1Amount(e.target.value)
 
-			//Fetch value from chain
 			const _token1Amount = ethers.utils.parseUnits(e.target.value, 'ether')
 			const result = await amm.calculateToken2Deposit(_token1Amount)
 			const _token2Amount = ethers.utils.formatUnits(result.toString(), 'ether')
 			
-
-			// Set token2 amount
 			setToken2Amount(_token2Amount)
 		} else {
 			setToken2Amount(e.target.value)
 
-			// Fetch value from chain
 			const _token2Amount = ethers.utils.parseUnits(e.target.value, 'ether')
 			const result = await amm.calculateToken1Deposit(_token2Amount)
 			const _token1Amount = ethers.utils.formatUnits(result.toString(), 'ether')
 
-			// Set token1 amount
 			setToken1Amount(_token1Amount)
 		}
 	}
